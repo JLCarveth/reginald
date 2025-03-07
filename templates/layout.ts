@@ -10,6 +10,7 @@ export function Layout(data: LayoutData) {
     <title>${data.title ? data.title : "Blog"}</title>
     <meta name="viewport" content="width=devicewidth, initial-scale=1">
     <meta charset="utf8">
+    <script defer data-domain="blog.jlcarveth.dev" src="https://stats.jlcarveth.dev/js/script.js"></script>
     ${data.stylesheets?.join("\n") ?? ""}
   </head>
   <body>
