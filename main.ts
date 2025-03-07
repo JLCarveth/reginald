@@ -21,14 +21,40 @@ async function serveIndex() {
     });
   }
 
-  let content = '<div class="flex column gap-16 center">';
-  /* Fetch frontmatter for each post */
+  let content = '<div class="post-list">';
+  
+  /* Fetch frontmatter and content preview for each post */
   for (const post of posts) {
     const text = await Deno.readTextFile(`posts/${post.name}`);
-    const { attrs } = extract(text);
+    const { attrs, body } = extract(text);
     Object.assign(post, attrs);
-    content += `<a href="/${post.name}">${post.title}</a>`;
+    
+    // Create a preview of the content (first 150 characters)
+    const contentPreview = body
+      .replace(/---[\s\S]*?---/, '') // Remove frontmatter if still present
+      .replace(/[#*`\[\]]/g, '')     // Remove markdown syntax
+      .trim()
+      .slice(0, 150) + (body.length > 150 ? '...' : '');
+    
+    // Format date if available
+    const formattedDate = post.publish_date 
+      ? new Date(post.publish_date).toISOString().split('T')[0]
+      : '';
+    
+    content += `
+      <div class="post-preview">
+        <h2 class="post-title"><a href="/${post.name}">${post.title || 'Untitled'}</a></h2>
+        <div class="post-meta">
+          ${post.author ? `<span class="post-author">By ${post.author}</span>` : ''}
+          ${formattedDate ? `<span class="post-date">${formattedDate}</span>` : ''}
+        </div>
+        <p class="post-excerpt">${contentPreview}</p>
+        <a href="/${post.name}" class="read-more">Read more</a>
+      </div>
+    `;
   }
+  
+  content += '</div>';
 
   const data: LayoutData = {
     title: BLOG_TITLE,
@@ -47,7 +73,7 @@ async function serveIndex() {
 }
 
 get("/", serveIndex);
-get("/:slug", async (req, _path, params) => {
+get("/:slug", async (_req, _path, params) => {
   const slug = params?.slug;
   try {
     // Attempt to read the post file
