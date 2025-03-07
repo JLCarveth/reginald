@@ -25,4 +25,6 @@ export type Post = {
   publish_date?: string;
   author?: string;
   content?: string;
+  contentPreview?: string;
+  body?: string; // Raw markdown content
 }
