@@ -10,7 +10,7 @@ import { getCachedPosts, getPost } from "./cache.ts";
 const PORT = parseInt(Deno.env.get("PORT") ?? "7182");
 const BLOG_TITLE = Deno.env.get("BLOG_TITLE") ?? "Reginald Blog";
 const BLOG_COPYRIGHT = Deno.env.get("BLOG_COPYRIGHT") ??
-  "©️ 2025 John L. Carveth";
+  "© 2025 John L. Carveth";
 
 /* Define root route that lists blog posts */
 async function serveIndex() {
