@@ -7,7 +7,7 @@ const PLAUSIBLE_URL = Deno.env.get("PLAUSIBLE_URL");
 
 const plausibleScript = () => {
   if (PLAUSIBLE_DOMAIN && PLAUSIBLE_URL) {
-    return `<script defer data-domain="blog.jlcarveth.dev" src="https://stats.jlcarveth.dev/js/script.js"></script>`;
+    return `<script defer data-domain="${PLAUSIBLE_DOMAIN}" src="${PLAUSIBLE_URL}"></script>`;
   } else return "";
 };
 
