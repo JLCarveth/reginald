@@ -27,13 +27,13 @@ async function serveIndex() {
     
     content += `
       <div class="post-preview">
-        <h2 class="post-title"><a href="/${post.name}">${post.title || 'Untitled'}</a></h2>
+        <h2 class="post-title"><a href="post/${post.name}">${post.title || 'Untitled'}</a></h2>
         <div class="post-meta">
           ${post.author ? `<span class="post-author">By ${post.author}</span>` : ''}
           ${formattedDate ? `<span class="post-date">${formattedDate}</span>` : ''}
         </div>
         <p class="post-excerpt">${post.contentPreview || ''}</p>
-        <a href="/${post.name}" class="read-more">Read more</a>
+        <a href="post/${post.name}" class="read-more">Read more</a>
       </div>
     `;
   }
@@ -58,7 +58,7 @@ async function serveIndex() {
 
 get("/", serveIndex);
 
-get("/:slug", async (_req, _path, params) => {
+get("/post/:slug", async (_req, _path, params) => {
   const slug = params?.slug;
   if (!slug) return new Response("Not Found", { status: 404 });
   
