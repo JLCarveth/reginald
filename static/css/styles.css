@@ -315,7 +315,7 @@ a.underline {
   }
 }
 
-.giscus-frame {
+.giscus-frame, .giscus {
   max-width: 800px;
   margin: 24px auto;
   padding: 0 12px;
