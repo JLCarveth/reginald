@@ -315,6 +315,21 @@ a.underline {
   }
 }
 
+.giscus-frame {
+  max-width: 800px;
+  margin: 24px auto;
+  padding: 0 12px;
+  display: block;
+}
+
+/* For smaller screens */
+@media (max-width: 768px) {
+  .giscus-frame {
+    margin: 1rem auto;
+    padding: 0 0.5rem;
+  }
+}
+
 footer {
   margin: 64px;
 }

@@ -18,5 +18,24 @@ export function PostTemplate({ post }: PostTemplateProps) {
     ${post.content}
   </div>
 </article>
+
+<section class="comments">
+  <script src="https://giscus.app/client.js"
+          data-repo="jlcarveth/reginald"
+          data-repo-id="R_kgDOOGMXjg"
+          data-category="General"
+          data-category-id="DIC_kwDOOGMXjs4Cs-5W"
+          data-mapping="og:title"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="preferred_color_scheme"
+          data-lang="en"
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async>
+  </script>
+</section>
 `;
 }
