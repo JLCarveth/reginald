@@ -3,7 +3,7 @@ title: Hardening systemd Services
 author: John L. Carveth
 publish_date: 2025-07-11
 lang: en_GB
-image: img/hardening.png
+image: img/hardening.jpg
 description: A simple guide on hardening systemd services.
 ---
 
