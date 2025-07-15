@@ -3,6 +3,8 @@ title: Hardening systemd Services
 author: John L. Carveth
 publish_date: 2025-07-11
 lang: en_GB
+image: img/hardening.webp
+description: A simple guide on hardening systemd services.
 ---
 
 My love for `systemd` is no secret, I've blogged about it more than once. I especially love systemd's ability to *harden* services. What does this mean exactly? Systemd offers a wealth of [directives](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html) that can restrict a service's access to files, syscalls, or even the network. This gives me peace of mind, knowing that even if the software running in the service has a vulnerability, the rest of the system stays protected.

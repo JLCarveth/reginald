@@ -1,15 +1,14 @@
-import { extract } from "@std/front-matter/any";
 import { render } from "@deno/gfm";
 
 import { get, listen, serveStatic } from "./server.ts";
 import { Layout } from "./templates/layout.ts";
-import { LayoutData, Post } from "./types.ts";
+import { LayoutData } from "./types.ts";
 import { PostTemplate } from "./templates/post.ts";
 import { getCachedPosts, getPost } from "./cache.ts";
 
-const PORT = parseInt(Deno.env.get("PORT") ?? "7182");
-const BLOG_TITLE = Deno.env.get("BLOG_TITLE") ?? "Reginald Blog";
-const BLOG_COPYRIGHT = Deno.env.get("BLOG_COPYRIGHT") ??
+const PORT = parseInt(Deno.env.get("PORT") || "7182");
+const BLOG_TITLE = Deno.env.get("BLOG_TITLE") || "Reginald Blog";
+const BLOG_COPYRIGHT = Deno.env.get("BLOG_COPYRIGHT") ||
   "© 2025 John L. Carveth";
 
 /* Define root route that lists blog posts */
@@ -17,28 +16,34 @@ async function serveIndex() {
   const posts = await getCachedPosts();
 
   let content = '<div class="post-list">';
-  
+
   /* Generate HTML for each post */
   for (const post of posts) {
     // Format date if available
-    const formattedDate = post.publish_date 
-      ? new Date(post.publish_date).toISOString().split('T')[0]
-      : '';
-    
+    const formattedDate = post.publish_date
+      ? new Date(post.publish_date).toISOString().split("T")[0]
+      : "";
+
     content += `
       <div class="post-preview">
-        <h2 class="post-title"><a href="post/${post.name}">${post.title || 'Untitled'}</a></h2>
+        <h2 class="post-title"><a href="post/${post.name}">${
+      post.title || "Untitled"
+    }</a></h2>
         <div class="post-meta">
-          ${post.author ? `<span class="post-author">By ${post.author}</span>` : ''}
-          ${formattedDate ? `<span class="post-date">${formattedDate}</span>` : ''}
+          ${
+      post.author ? `<span class="post-author">By ${post.author}</span>` : ""
+    }
+          ${
+      formattedDate ? `<span class="post-date">${formattedDate}</span>` : ""
+    }
         </div>
-        <p class="post-excerpt">${post.contentPreview || ''}</p>
+        <p class="post-excerpt">${post.contentPreview || ""}</p>
         <a href="post/${post.name}" class="read-more">Read more</a>
       </div>
     `;
   }
-  
-  content += '</div>';
+
+  content += "</div>";
 
   const data: LayoutData = {
     title: BLOG_TITLE,
@@ -61,9 +66,9 @@ get("/", serveIndex);
 get("/post/:slug", async (_req, _path, params) => {
   const slug = params?.slug;
   if (!slug) return new Response("Not Found", { status: 404 });
-  
+
   const post = await getPost(slug);
-  
+
   if (!post) {
     // Return a 404 response
     const data: LayoutData = {
@@ -83,16 +88,16 @@ get("/post/:slug", async (_req, _path, params) => {
       headers: { "Content-Type": "text/html" },
     });
   }
-  
+
   // Render markdown to HTML using @deno/gfm
   const htmlContent = render(post.body);
-  
+
   // Use the PostTemplate to render the post
-  const content = PostTemplate({ 
+  const content = PostTemplate({
     post: {
       ...post,
       content: htmlContent, // The rendered HTML content
-    }
+    },
   });
 
   // Create layout data
@@ -105,6 +110,10 @@ get("/post/:slug", async (_req, _path, params) => {
     stylesheets: [
       `<link rel="stylesheet" href="/css/styles.css"/>`,
     ],
+    ogTitle: post.title,
+    ogDescription: post.description || post.contentPreview,
+    ogImage: post.image ? (post.image.startsWith('http') ? post.image : `${Deno.env.get("BASE_URL") || ""}${post.image}`) : undefined,
+    ogUrl: `${Deno.env.get("BASE_URL") || ""}post/${post.name}`,
   };
 
   return new Response(Layout(data), {

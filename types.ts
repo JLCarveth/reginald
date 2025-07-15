@@ -17,6 +17,10 @@ export type LayoutData = {
   scripts?: string[];
   stylesheets?: string[];
   copyright: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogUrl?: string;
 };
 
 export type Post = {
@@ -27,4 +31,6 @@ export type Post = {
   content?: string;
   contentPreview?: string;
   body?: string; // Raw markdown content
+  description?: string;
+  image?: string;
 }
