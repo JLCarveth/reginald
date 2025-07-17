@@ -38,6 +38,9 @@ export function Layout(data: LayoutData) {
     <meta name="twitter:description" content="${ogDescription}">
     ${ogImage ? `<meta name="twitter:image" content="${ogImage}">` : ''}
     
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml">
+    
     ${plausibleScript()}
     ${data.stylesheets?.join("\n") ?? ""}
   </head>
