@@ -28,10 +28,10 @@ export function generateRSSFeed(posts: Post[], options: RSSFeedOptions): string 
     .filter(post => post.publish_date) // Only include published posts
     .map(post => ({
       title: post.title || "Untitled",
-      description: post.description || post.contentPreview || "",
-      link: `${link}/post/${post.name}`,
+      description: post.body || post.description || post.contentPreview || "",
+      link: `${link}post/${post.name}`,
       pubDate: new Date(post.publish_date!),
-      guid: `${link}/post/${post.name}`,
+      guid: `${link}post/${post.name}`,
     }));
 
   // Sort items by publication date (newest first)
