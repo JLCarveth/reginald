@@ -18,7 +18,6 @@ interface RSSItem {
   link: string;
   pubDate: Date;
   guid: string;
-  author?: string;
 }
 
 export function generateRSSFeed(posts: Post[], options: RSSFeedOptions): string {
@@ -33,7 +32,6 @@ export function generateRSSFeed(posts: Post[], options: RSSFeedOptions): string 
       link: `${link}/post/${post.name}`,
       pubDate: new Date(post.publish_date!),
       guid: `${link}/post/${post.name}`,
-      author: post.author || managingEditor || "",
     }));
 
   // Sort items by publication date (newest first)
@@ -60,7 +58,6 @@ export function generateRSSFeed(posts: Post[], options: RSSFeedOptions): string 
       <link>${escapeXML(item.link)}</link>
       <pubDate>${item.pubDate.toUTCString()}</pubDate>
       <guid isPermaLink="true">${escapeXML(item.guid)}</guid>
-      ${item.author ? `<author>${escapeXML(item.author)}</author>` : ''}
     </item>`).join('')}
   </channel>
 </rss>`;
