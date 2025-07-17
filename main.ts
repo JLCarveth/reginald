@@ -5,11 +5,14 @@ import { Layout } from "./templates/layout.ts";
 import { LayoutData } from "./types.ts";
 import { PostTemplate } from "./templates/post.ts";
 import { getCachedPosts, getPost } from "./cache.ts";
+import { generateRSSFeed } from "./rss.ts";
 
 const PORT = parseInt(Deno.env.get("PORT") || "7182");
 const BLOG_TITLE = Deno.env.get("BLOG_TITLE") || "Reginald Blog";
 const BLOG_COPYRIGHT = Deno.env.get("BLOG_COPYRIGHT") ||
   "© 2025 John L. Carveth";
+const BASE_URL = Deno.env.get("BASE_URL") || "https://blog.jlcarveth.dev";
+const BLOG_DESCRIPTION = Deno.env.get("BLOG_DESCRIPTION") || "A personal blog about technology, programming, and software development";
 
 /* Define root route that lists blog posts */
 async function serveIndex() {
@@ -118,6 +121,30 @@ get("/post/:slug", async (_req, _path, params) => {
 
   return new Response(Layout(data), {
     headers: { "Content-Type": "text/html" },
+  });
+});
+
+/* RSS Feed Route */
+get("/rss.xml", async () => {
+  const posts = await getCachedPosts();
+  
+  const rssXML = generateRSSFeed(posts, {
+    title: BLOG_TITLE,
+    description: BLOG_DESCRIPTION,
+    link: BASE_URL,
+    language: "en-us",
+    copyright: BLOG_COPYRIGHT,
+    managingEditor: "john@jlcarveth.dev (John L. Carveth)",
+    webMaster: "john@jlcarveth.dev (John L. Carveth)",
+    lastBuildDate: new Date(),
+    ttl: 60, // 60 minutes
+  });
+
+  return new Response(rssXML, {
+    headers: { 
+      "Content-Type": "application/rss+xml; charset=utf-8",
+      "Cache-Control": "max-age=3600", // Cache for 1 hour
+    },
   });
 });
 
