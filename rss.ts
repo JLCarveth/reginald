@@ -1,3 +1,4 @@
+import { render } from "@deno/gfm";
 import { Post } from "./types.ts";
 
 interface RSSFeedOptions {
@@ -28,7 +29,7 @@ export function generateRSSFeed(posts: Post[], options: RSSFeedOptions): string 
     .filter(post => post.publish_date) // Only include published posts
     .map(post => ({
       title: post.title || "Untitled",
-      description: post.body || post.description || post.contentPreview || "",
+      description: formatPostContentForRSS(post),
       link: `${link}post/${post.name}`,
       pubDate: new Date(post.publish_date!),
       guid: `${link}post/${post.name}`,
@@ -63,6 +64,20 @@ export function generateRSSFeed(posts: Post[], options: RSSFeedOptions): string 
 </rss>`;
 
   return rssXML;
+}
+
+function formatPostContentForRSS(post: Post): string {
+  // Prefer full content (body) over shorter alternatives
+  let content = post.body || post.content || post.description || post.contentPreview || "";
+  
+  if (!content) {
+    return "";
+  }
+  
+  // Use @deno/gfm to render markdown to HTML
+  const htmlContent = render(content);
+  
+  return htmlContent;
 }
 
 function escapeXML(text: string): string {

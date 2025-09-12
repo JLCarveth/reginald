@@ -88,3 +88,39 @@ export async function getPost(slug: string): Promise<Post | null> {
     return null;
   }
 }
+
+/**
+ * Load all posts with full content (for RSS feed)
+ */
+export async function loadPostsWithFullContent(): Promise<Post[]> {
+  const posts: Post[] = [];
+  
+  try {
+    for await (const entry of Deno.readDir("posts/")) {
+      if (!entry.isFile || !entry.name.endsWith('.md')) continue;
+      
+      try {
+        const text = await Deno.readTextFile(`posts/${entry.name}`);
+        const { attrs, body } = extract(text);
+        
+        posts.push({
+          name: entry.name,
+          body, // Full markdown content
+          ...attrs,
+        });
+      } catch (err) {
+        console.error(`Error loading post ${entry.name}:`, err);
+      }
+    }
+    
+    // Sort posts by publish date (newest first)
+    return posts.sort((a, b) => {
+      const dateA = a.publish_date ? new Date(a.publish_date).getTime() : 0;
+      const dateB = b.publish_date ? new Date(b.publish_date).getTime() : 0;
+      return dateB - dateA;
+    });
+  } catch (err) {
+    console.error("Error loading posts with full content:", err);
+    return [];
+  }
+}

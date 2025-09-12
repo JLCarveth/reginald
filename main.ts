@@ -4,7 +4,7 @@ import { get, listen, serveStatic } from "./server.ts";
 import { Layout } from "./templates/layout.ts";
 import { LayoutData } from "./types.ts";
 import { PostTemplate } from "./templates/post.ts";
-import { getCachedPosts, getPost } from "./cache.ts";
+import { getCachedPosts, getPost, loadPostsWithFullContent } from "./cache.ts";
 import { generateRSSFeed } from "./rss.ts";
 
 const PORT = parseInt(Deno.env.get("PORT") || "7182");
@@ -126,7 +126,7 @@ get("/post/:slug", async (_req, _path, params) => {
 
 /* RSS Feed Route */
 get("/rss.xml", async () => {
-  const posts = await getCachedPosts();
+  const posts = await loadPostsWithFullContent();
   
   const rssXML = generateRSSFeed(posts, {
     title: BLOG_TITLE,
