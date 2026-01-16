@@ -1,10 +1,14 @@
 export type FooterProps = {
   copyright: string;
 }
-export default function Footer(data : FooterProps) {
+
+export default function Footer(data: FooterProps) {
   return `
 <footer>
-  ${data.copyright}
+  <div class="footer-content">
+    <p>${data.copyright}</p>
+    <p class="footer-tagline">Powered by curiosity</p>
+  </div>
 </footer>
-  `;
+`;
 }

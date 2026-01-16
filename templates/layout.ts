@@ -22,7 +22,7 @@ export function Layout(data: LayoutData) {
 <html>
   <head>
     <title>${data.title ? data.title : "Blog"}</title>
-    <meta name="viewport" content="width=devicewidth, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf8">
     
     <!-- Open Graph meta tags -->
