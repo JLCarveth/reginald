@@ -75,8 +75,11 @@ function formatPostContentForRSS(post: Post): string {
   }
   
   // Use @deno/gfm to render markdown to HTML
-  const htmlContent = render(content);
-  
+  const htmlContent = render(content).replace(
+    /<a class="anchor"[^>]*>[\s\S]*?<\/a>/g,
+    ""
+  );
+
   return htmlContent;
 }
 
